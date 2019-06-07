@@ -1,35 +1,36 @@
 package main
 
 import (
-	// "fyne.io/fyne"
+	"fyne.io/fyne"
 	"fyne.io/fyne/app"
 	"fyne.io/fyne/widget"
 )
+
+func showHelpWindow(app fyne.App) {
+	w := app.NewWindow("Help")
+	helpText := "Use IMerge to blend multiple images evenly into one.\nSelect the folder in which all your Images are stored,\nthen press 'Go'.\nAll images in that directory will be merged into one"
+
+	w.SetContent(
+		widget.NewVBox(
+			widget.NewGroup(
+				"Help",
+				widget.NewLabel(helpText),
+			),
+			widget.NewHBox(
+				widget.NewButton("Ok", func() {
+					w.Close()
+				}),
+			),
+		),
+	)
+	w.CenterOnScreen()
+	w.Show()
+}
 
 func main() {
 	app := app.New()
 
 	quit := func() { _ = app.Quit }
-
-	showHelp := func() {
-		w := app.NewWindow("Help")
-		helpText := "Use IMerge to blend multiple images evenly into one.\nSelect the folder in which all your Images are stored,\nthen press 'Go'.\nAll images in that directory will be merged into one"
-
-		w.SetContent(
-			widget.NewVBox(
-				widget.NewGroup(
-					"Help",
-					widget.NewLabel(helpText),
-				),
-				widget.NewHBox(
-					widget.NewButton("Ok", func() {
-						w.Close()
-					}),
-				),
-			),
-		)
-		w.Show()
-	}
 
 	//  TODO merge Image Funciton
 	mergeImages := quit
@@ -69,7 +70,7 @@ func main() {
 			widget.NewButton("Go", mergeImages),
 			widget.NewHBox(
 				widget.NewButton("Quit", quit),
-				widget.NewButton("Help", showHelp),
+				widget.NewButton("Help", func() { showHelpWindow(app) }),
 			),
 		))
 
