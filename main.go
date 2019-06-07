@@ -12,12 +12,23 @@ func main() {
 	quit := func() { _ = app.Quit }
 
 	showHelp := func() {
-		helpText := "Use IMerge to blend multiple images evenly into one. First, select the folder in which all your Images are stored. Press 'Go' and all images in that directory will be merged into one"
-
 		w := app.NewWindow("Help")
-		w.SetContent(widget.NewLabel(helpText))
+		helpText := "Use IMerge to blend multiple images evenly into one.\nSelect the folder in which all your Images are stored,\nthen press 'Go'.\nAll images in that directory will be merged into one"
 
-		w.ShowAndRun()
+		w.SetContent(
+			widget.NewVBox(
+				widget.NewGroup(
+					"Help",
+					widget.NewLabel(helpText),
+				),
+				widget.NewHBox(
+					widget.NewButton("Ok", func() {
+						w.Close()
+					}),
+				),
+			),
+		)
+		w.Show()
 	}
 
 	//  TODO merge Image Funciton
