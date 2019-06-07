@@ -30,7 +30,7 @@ func showHelpWindow(app fyne.App) {
 func main() {
 	app := app.New()
 
-	quit := func() { _ = app.Quit }
+	quit := func() { app.Quit() }
 
 	//  TODO merge Image Funciton
 	mergeImages := quit
