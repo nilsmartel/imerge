@@ -4,6 +4,8 @@ import (
 	"fyne.io/fyne"
 	"fyne.io/fyne/app"
 	"fyne.io/fyne/widget"
+
+	"github.com/sqweek/dialog"
 )
 
 func showHelpWindow(app fyne.App) {
@@ -27,6 +29,13 @@ func showHelpWindow(app fyne.App) {
 	w.Show()
 }
 
+func showDialog(app fyne.App, title, message string) {
+	w := app.NewWindow(title)
+	w.SetContent(widget.NewLabel(message))
+	w.CenterOnScreen()
+	w.Show()
+}
+
 func main() {
 	app := app.New()
 
@@ -39,7 +48,16 @@ func main() {
 	showFiles := quit
 
 	// TODO Select directory funciotn
-	selectDirectory := quit
+	selectDirectory := func() {
+		directory, err := dialog.Directory().Title("Select Images").Browse()
+
+		if err != nil {
+			showDialog(app, "Error", "Couldn't open Directory Browser")
+		} else {
+			showDialog(app, "Success", directory)
+		}
+
+	}
 
 	w := app.NewWindow("IMerge")
 
