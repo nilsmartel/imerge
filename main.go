@@ -91,13 +91,28 @@ func main() {
 	//  TODO merge Image Funciton
 	mergeImages := quit
 
-	//  TODO Show Files
-	showFiles := quit
+	showFiles := func() {
+		label := ""
+		for _, v := range images {
+			label = label + "\n" + v
+		}
+
+		w := app.NewWindow("Images to blend")
+		w.SetContent(
+			widget.NewVBox(
+				widget.NewLabel(label),
+			),
+		)
+
+		w.CenterOnScreen()
+		w.Show()
+	}
 
 	selectDirectory := func() {
 		directory, err := dialog.Directory().Title("Select Images").Browse()
 		// err might be nil in case uses clicks 'cancel'. In that case he woun't even be surprised, if it's not working
-		if err != nil {
+		if err == nil {
+			showDialog(app, "Success", "Selected "+directory)
 			setDirectory(directory)
 		}
 	}
