@@ -13,7 +13,10 @@ import (
 
 func showHelpWindow(app fyne.App) {
 	w := app.NewWindow("Help")
-	helpText := "Use IMerge to blend multiple images evenly into one.\nSelect the folder in which all your Images are stored,\nthen press 'Go'.\nAll images in that directory will be merged into one"
+	helpText := `Use IMerge to blend multiple images evenly into one.
+Select the folder in which all your Images are stored,
+then press 'Go'.
+All images in that directory will be merged into one`
 
 	w.SetContent(
 		widget.NewVBox(
