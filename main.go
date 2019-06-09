@@ -39,7 +39,7 @@ func showDialog(app fyne.App, title, message string) {
 func main() {
 	app := app.New()
 
-	quit := func() { app.Quit() }
+	quit := app.Quit
 
 	//  TODO merge Image Funciton
 	mergeImages := quit
