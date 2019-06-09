@@ -25,9 +25,7 @@ All images in that directory will be merged into one`
 				widget.NewLabel(helpText),
 			),
 			widget.NewHBox(
-				widget.NewButton("Ok", func() {
-					w.Close()
-				}),
+				widget.NewButton("Ok", w.Close),
 			),
 		),
 	)
