@@ -105,13 +105,17 @@ func main() {
 			label = label + "\n" + v
 		}
 
-		w := app.NewWindow("Images to blend")
-		w.SetContent(
+		content :=
 			widget.NewScrollContainer(
 				widget.NewVBox(
 					widget.NewLabel(label),
 				),
-			),
+			)
+		content.Resize(fyne.NewSize(256, 256))
+
+		w := app.NewWindow("Images to blend")
+		w.SetContent(
+			content,
 		)
 
 		w.CenterOnScreen()
