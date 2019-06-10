@@ -131,7 +131,7 @@ func main() {
 
 	quit := application.Quit
 
-	//  TODO merge Image Funciton
+	//  TODO merge Image Function
 	mergeImages := quit
 
 	showFiles := func() {
@@ -167,7 +167,7 @@ func main() {
 
 	selectDirectory := func() {
 		directory, err := dialog.Directory().Title("Select Images").Browse()
-		// err might be nil in case uses clicks 'cancel'. In that case he won't even be surprised, if it's not working
+		// err might be nil in case user clicks 'cancel'. In that case he won't even be surprised, if it's not working
 		if err == nil {
 			setDirectory(directory)
 		}
