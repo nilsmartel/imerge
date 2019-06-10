@@ -107,8 +107,10 @@ func main() {
 
 		w := app.NewWindow("Images to blend")
 		w.SetContent(
-			widget.NewVBox(
-				widget.NewLabel(label),
+			widget.NewScrollContainer(
+				widget.NewVBox(
+					widget.NewLabel(label),
+				),
 			),
 		)
 
@@ -120,7 +122,6 @@ func main() {
 		directory, err := dialog.Directory().Title("Select Images").Browse()
 		// err might be nil in case uses clicks 'cancel'. In that case he woun't even be surprised, if it's not working
 		if err == nil {
-			showDialog(app, "Success", "Selected "+directory)
 			setDirectory(directory)
 		}
 	}
