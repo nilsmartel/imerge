@@ -23,12 +23,12 @@ func readImage(path string) image.Image {
 		log.Fatal(err)
 	}
 	defer reader.Close()
-	image, _, err := image.Decode(reader)
+	img, _, err := image.Decode(reader)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return image
+	return img
 }
 
 func showHelpWindow(app fyne.App) {
@@ -67,6 +67,11 @@ func cutOff(s string, length int) string {
 	return s[:length] + "..."
 }
 
+type FileInfo struct {
+	Name string
+	Path string
+}
+
 func main() {
 	application := app.New()
 	labels := struct {
@@ -79,7 +84,7 @@ func main() {
 		widget.NewLabel("Dimension:\n width: 0px\n height: 0px"),
 	}
 	directory := ""
-	var images []string
+	var images []FileInfo
 
 	setDirectory := func(dir string) {
 		{
@@ -93,7 +98,7 @@ func main() {
 			directory = dir
 			labels.directory.SetText(cutOff(directory, 32))
 
-			images = make([]string, 0)
+			images = make([]FileInfo, 0)
 			isImage := func(s string) bool {
 				switch s {
 				case ".png", ".jpg", ".jpeg":
@@ -105,7 +110,7 @@ func main() {
 
 			for _, file := range directoryFiles {
 				if !file.IsDir() && isImage(filepath.Ext(file.Name())) {
-					images = append(images, file.Name())
+					images = append(images, FileInfo{file.Name(), directory + "/" + file.Name()})
 				}
 			}
 
@@ -118,7 +123,7 @@ func main() {
 			labels.dimension.SetText("Loading Image Information")
 
 			go func() {
-				bounds := readImage(images[0]).Bounds()
+				bounds := readImage(images[0].Path).Bounds()
 				labels.dimension.SetText("Dimension:\n width: " + string(bounds.Size().X) + "px\n height: " + string(bounds.Size().Y) + "px")
 			}()
 		}
@@ -140,7 +145,7 @@ func main() {
 
 		label := ""
 		for _, v := range images {
-			label = label + v + "\n"
+			label += v.Name + "\n"
 		}
 
 		content :=
@@ -162,7 +167,7 @@ func main() {
 
 	selectDirectory := func() {
 		directory, err := dialog.Directory().Title("Select Images").Browse()
-		// err might be nil in case uses clicks 'cancel'. In that case he woun't even be surprised, if it's not working
+		// err might be nil in case uses clicks 'cancel'. In that case he won't even be surprised, if it's not working
 		if err == nil {
 			setDirectory(directory)
 		}
