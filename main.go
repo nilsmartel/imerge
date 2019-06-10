@@ -1,6 +1,12 @@
 package main
 
 import (
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
+	"log"
+	"os"
+
 	"io/ioutil"
 	"path/filepath"
 
@@ -10,6 +16,20 @@ import (
 
 	"github.com/sqweek/dialog"
 )
+
+func readImage(path string) image.Image {
+	reader, err := os.Open(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer reader.Close()
+	image, _, err := image.Decode(reader)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return image
+}
 
 func showHelpWindow(app fyne.App) {
 	w := app.NewWindow("Help")
@@ -90,6 +110,17 @@ func main() {
 			}
 
 			labels.amount.SetText("Amount: " + string(len(images)))
+
+			if len(images) == 0 {
+				return
+			}
+
+			labels.dimension.SetText("Loading Image Information")
+
+			go func() {
+				bounds := readImage(images[0]).Bounds()
+				labels.dimension.SetText("Dimension:\n width: " + string(bounds.Size().X) + "px\n height: " + string(bounds.Size().Y) + "px")
+			}()
 		}
 	}
 
