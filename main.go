@@ -92,6 +92,14 @@ func main() {
 	mergeImages := quit
 
 	showFiles := func() {
+		if len(images) == 0 {
+			if directory == "" {
+				showDialog(app, "No Directory", "No directory selected.\nPlease specify directory first.")
+			} else {
+				showDialog(app, "No Images", "No Images in selected Directory")
+			}
+		}
+
 		label := ""
 		for _, v := range images {
 			label = label + "\n" + v
