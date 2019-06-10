@@ -22,7 +22,7 @@ func readImage(path string) image.Image {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer reader.Close()
+	defer func() { _ = reader.Close() }()
 	img, _, err := image.Decode(reader)
 	if err != nil {
 		log.Fatal(err)
