@@ -48,11 +48,16 @@ func cutOff(s string, length int) string {
 }
 
 func main() {
-	app := app.New()
-	directoryLabel := widget.NewLabel("Directory")
-	amountLabel := widget.NewLabel("Amount: 0")
-	dimensionLabel := widget.NewLabel("Dimension:\n width: 0px\n height: 0px")
-
+	application := app.New()
+	labels := struct {
+		directory *widget.Label
+		amount    *widget.Label
+		dimension *widget.Label
+	}{
+		widget.NewLabel("Directory"),
+		widget.NewLabel("Amount: 0"),
+		widget.NewLabel("Dimension:\n width: 0px\n height: 0px"),
+	}
 	directory := ""
 	var images []string
 
@@ -61,12 +66,12 @@ func main() {
 			directoryFiles, err := ioutil.ReadDir(dir)
 
 			if err != nil {
-				showDialog(app, "Error", "Failed to read Directory "+dir)
+				showDialog(application, "Error", "Failed to read Directory "+dir)
 				return
 			}
 
 			directory = dir
-			directoryLabel.SetText(cutOff(directory, 32))
+			labels.directory.SetText(cutOff(directory, 32))
 
 			images = make([]string, 0)
 			isImage := func(s string) bool {
@@ -83,10 +88,12 @@ func main() {
 					images = append(images, file.Name())
 				}
 			}
+
+			labels.amount.SetText("Amount: " + string(len(images)))
 		}
 	}
 
-	quit := app.Quit
+	quit := application.Quit
 
 	//  TODO merge Image Funciton
 	mergeImages := quit
@@ -94,15 +101,15 @@ func main() {
 	showFiles := func() {
 		if len(images) == 0 {
 			if directory == "" {
-				showDialog(app, "No Directory", "No directory selected.\nPlease specify directory first.")
+				showDialog(application, "No Directory", "No directory selected.\nPlease specify directory first.")
 			} else {
-				showDialog(app, "No Images", "No Images in selected Directory")
+				showDialog(application, "No Images", "No Images in selected Directory")
 			}
 		}
 
 		label := ""
 		for _, v := range images {
-			label = label + "\n" + v
+			label = label + v + "\n"
 		}
 
 		content :=
@@ -113,7 +120,7 @@ func main() {
 			)
 		content.Resize(fyne.NewSize(256, 256))
 
-		w := app.NewWindow("Images to blend")
+		w := application.NewWindow("Images to blend")
 		w.SetContent(
 			content,
 		)
@@ -130,13 +137,13 @@ func main() {
 		}
 	}
 
-	w := app.NewWindow("IMerge")
+	w := application.NewWindow("IMerge")
 
 	w.SetContent(
 		widget.NewVBox(
 			widget.NewLabel("IMerge"),
 			// TODO maybe a little space (~16px) here?
-			directoryLabel,
+			labels.directory,
 			widget.NewHBox(
 				widget.NewButton("Select", selectDirectory),
 				widget.NewButton("Show", showFiles),
@@ -145,15 +152,15 @@ func main() {
 			widget.NewGroup(
 				"Info",
 				widget.NewVBox(
-					amountLabel,
-					dimensionLabel,
+					labels.amount,
+					labels.dimension,
 				),
 			),
 
 			widget.NewButton("Go", mergeImages),
 			widget.NewHBox(
 				widget.NewButton("Quit", quit),
-				widget.NewButton("Help", func() { showHelpWindow(app) }),
+				widget.NewButton("Help", func() { showHelpWindow(application) }),
 			),
 		))
 
