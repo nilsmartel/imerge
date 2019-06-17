@@ -1,6 +1,8 @@
 package main
 
 import (
+	"./img"
+
 	_ "image/jpeg"
 	_ "image/png"
 	"strconv"
@@ -66,7 +68,7 @@ func main() {
 			labels.dimension.SetText("Loading Image Information")
 
 			go func() {
-				image := readImage(images[0].Path)
+				image, _ := img.Read(images[0].Path)
 
 				width := image.Bounds().Max.X
 				height := image.Bounds().Max.Y
