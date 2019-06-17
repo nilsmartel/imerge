@@ -1,12 +1,8 @@
 package main
 
 import (
-	"image"
 	_ "image/jpeg"
 	_ "image/png"
-	"log"
-	"os"
-
 	"strconv"
 
 	"io/ioutil"
@@ -18,61 +14,6 @@ import (
 
 	"github.com/sqweek/dialog"
 )
-
-func readImage(path string) image.Image {
-	reader, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer func() { _ = reader.Close() }()
-	img, _, err := image.Decode(reader)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return img
-}
-
-func showHelpWindow(app fyne.App) {
-	w := app.NewWindow("Help")
-	helpText := `Use IMerge to blend multiple images evenly into one.
-Select the folder in which all your Images are stored,
-then press 'Go'.
-All images in that directory will be merged into one`
-
-	w.SetContent(
-		widget.NewVBox(
-			widget.NewGroup(
-				"Help",
-				widget.NewLabel(helpText),
-			),
-			widget.NewHBox(
-				widget.NewButton("Ok", w.Close),
-			),
-		),
-	)
-	w.CenterOnScreen()
-	w.Show()
-}
-
-func showDialog(app fyne.App, title, message string) {
-	w := app.NewWindow(title)
-	w.SetContent(widget.NewLabel(message))
-	w.CenterOnScreen()
-	w.Show()
-}
-
-func cutOff(s string, length int) string {
-	if len(s) < length {
-		return s
-	}
-	return s[:length] + "..."
-}
-
-type FileInfo struct {
-	Name string
-	Path string
-}
 
 func main() {
 	application := app.New()
@@ -98,7 +39,7 @@ func main() {
 			}
 
 			directory = dir
-			labels.directory.SetText(cutOff(directory, 32))
+			labels.directory.SetText(CutOff(directory, 32))
 
 			images = make([]FileInfo, 0)
 			isImage := func(s string) bool {
