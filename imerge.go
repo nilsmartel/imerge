@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 
+	"strconv"
+
 	"io/ioutil"
 	"path/filepath"
 
@@ -114,7 +116,7 @@ func main() {
 				}
 			}
 
-			labels.amount.SetText("Amount: " + string(len(images)))
+			labels.amount.SetText("Amount: " + strconv.Itoa(len(images)))
 
 			if len(images) == 0 {
 				return
@@ -123,8 +125,11 @@ func main() {
 			labels.dimension.SetText("Loading Image Information")
 
 			go func() {
-				bounds := readImage(images[0].Path).Bounds()
-				labels.dimension.SetText("Dimension:\n width: " + string(bounds.Size().X) + "px\n height: " + string(bounds.Size().Y) + "px")
+				image := readImage(images[0].Path)
+
+				width := image.Bounds().Max.X
+				height := image.Bounds().Max.Y
+				labels.dimension.SetText("Dimension:\n width: " + strconv.Itoa(width) + "px\n height: " + strconv.Itoa(height) + "px")
 			}()
 		}
 	}
